@@ -7,6 +7,8 @@ try {
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -15,12 +17,22 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
+    remotePatterns: [],
+    formats: ['image/webp', 'image/avif'],
   },
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  webpack: (config) => {
+    config.externals = [...(config.externals || []), { canvas: 'canvas' }];
+    return config;
+  },
+  compress: true,
+  swcMinify: true,
+  reactStrictMode: true,
+  poweredByHeader: false,
 }
 
 mergeConfig(nextConfig, userConfig)
